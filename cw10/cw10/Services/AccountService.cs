@@ -21,10 +21,7 @@ public class AccountService(Cw10Context context) : IAccountService
             LastName = account.LastName,
             Email = account.Email,
             Phone = account.Phone,
-            Role = new RoleDetails
-            {
-                Name = context.Roles.FirstOrDefault(r => r.IdRole == account.IdRole)!.Name
-            },
+            Role = context.Roles.FirstOrDefault(r => r.IdRole == account.IdRole)!.Name,
             Cart = await context.ShoppingCarts.Where(sc => sc.IdAccount == account.IdAccount)
                 .Select(sc => new ProductDetails
                 {

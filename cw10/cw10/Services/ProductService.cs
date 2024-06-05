@@ -9,7 +9,7 @@ public class ProductService(Cw10Context context) : IProductService
 {
     public async Task AddProduct(ProductRequestModel request)
     {
-        var checkProduct = await context.Products.Where(p => p.Name.Equals(request.ProductName)).FirstOrDefaultAsync();
+        var checkProduct = await context.Products.SingleOrDefaultAsync(p => p.Name.Equals(request.ProductName));
         if (checkProduct is not null)
         {
             throw new BadRequestException($"Product with name {checkProduct.Name} already exists");
@@ -19,10 +19,10 @@ public class ProductService(Cw10Context context) : IProductService
             .ToListAsync();
         if (categories.Count != request.ProductCategories.Count)
         {
-            var idCategorisList = categories.Select(c => c.IdCategory).ToList();
+            var idCategoriesList = categories.Select(c => c.IdCategory).ToList();
             foreach (var idCategory in request.ProductCategories)
             {
-                if (!idCategorisList.Contains(idCategory))
+                if (!idCategoriesList.Contains(idCategory))
                 {
                     throw new BadRequestException($"Category with id {idCategory} does not exists");
                 }
